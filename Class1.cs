@@ -34,7 +34,7 @@ namespace Asynclass
 {
     public abstract class Async<TBase>
     {
-        private Action<TBase> _initializer = async a => await Task.Delay(0);
+        private Func<TBase, Task> _initializer = async a => await Task.Delay(0);
         private Action<List<Exception>> _catcher = async a => await Task.Delay(0);
         private bool _initialized;
         private int _retryTimes = 1;
@@ -51,7 +51,7 @@ namespace Asynclass
             throw new InvalidOperationException("Can't set retry times in a initialized async class");
         }
 
-        public void Init(Action<TBase> initializer)
+        public void Init(Func<TBase, Task> initializer)
         {
             if(!_initialized)
             {
@@ -76,7 +76,7 @@ namespace Asynclass
             throw new InvalidOperationException("Can't define a catcher in a non-initialized async class");
         }
 
-        private async Task<TBase> Initialize(Action<TBase> initializer)
+        private async Task<TBase> Initialize(Func<TBase, Task> initializer)
         {
             var baseInstance = (TBase)(object)this;
 
