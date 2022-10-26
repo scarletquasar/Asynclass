@@ -1,0 +1,5 @@
+C:\Users\Usuário\Documents\GitHub\Asynclass\Asynclass\obj\Debug\net6.0\Asynclass.csproj.AssemblyReference.cache
+C:\Users\Usuário\Documents\GitHub\Asynclass\Asynclass\obj\Debug\net6.0\Asynclass.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuário\Documents\GitHub\Asynclass\Asynclass\obj\Debug\net6.0\Asynclass.AssemblyInfoInputs.cache
+C:\Users\Usuário\Documents\GitHub\Asynclass\Asynclass\obj\Debug\net6.0\Asynclass.AssemblyInfo.cs
+C:\Users\Usuário\Documents\GitHub\Asynclass\Asynclass\obj\Debug\net6.0\Asynclass.csproj.CoreCompileInputs.cache
