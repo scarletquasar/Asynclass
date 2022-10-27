@@ -1,38 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
-using Asynclass;
-
-var a = await new Test("a", "b");
-
-Console.WriteLine(a.Potato);
-Console.WriteLine(a.Banana);
-
-public class Test : Async<Test>
-{
-    public string? Banana { get; set; }
-    public string? Potato { get; set; }
-
-    public Test(string potato, string banana)
-    {
-        SetRetryTimes(10);
-
-        Init(async instance =>
-        {
-            await Task.Delay(1);
-
-            instance.Potato = potato;
-            instance.Banana = banana;
-        });
-
-        Catch(errors =>
-        {
-            errors.ForEach(error => Console.WriteLine(error.Message));
-        });
-    }
-}
 
 namespace Asynclass
 {
-    public abstract class Async<TBase>
+    public abstract class Async<TBase> where TBase : Async<TBase>
     {
         private Func<TBase, Task> _initializer = async a => await Task.Delay(0);
         private Action<List<Exception>> _catcher = async a => await Task.Delay(0);
