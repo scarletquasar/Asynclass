@@ -22,6 +22,12 @@ namespace Asynclass.Tests
 
         public MockedClass(int valueA, int valueB)
         {
+            Config(options =>
+            {
+                options.ThrowOnError = true;
+                options.RetryTimes = 1;
+            });
+
             Init(async instance =>
             {
                 await Task.Delay(100);

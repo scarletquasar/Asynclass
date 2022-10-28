@@ -7,18 +7,23 @@ namespace Asynclass
         private Func<TBase, Task> _initializer = async a => await Task.Delay(0);
         private Action<List<Exception>> _catcher = async a => await Task.Delay(0);
         private bool _initialized;
-        private int _retryTimes = 1;
+        private bool _throwOnError = false;
+        private uint _retryTimes = 1;
 
-        public void SetRetryTimes(int retryTimes)
+        public void Config(Action<Options> optionsExpression)
         {
             if (!_initialized)
             {
-                _retryTimes = retryTimes;
+                var defaultOptions = new Options();
+                optionsExpression(defaultOptions);
+
+                _retryTimes = defaultOptions.RetryTimes;
+                _throwOnError = defaultOptions.ThrowOnError;
 
                 return;
             }
 
-            throw new InvalidOperationException("Can't set retry times in a initialized async class");
+            throw new InvalidOperationException("Can't set a configuration in a initialized async class");
         }
 
         public void Init(Func<TBase, Task> initializer)
@@ -82,6 +87,11 @@ namespace Asynclass
             }
             catch
             {
+                if(_throwOnError)
+                {
+                    throw new AggregateException(exceptions);
+                }
+
                 _catcher(exceptions);
             }
 
