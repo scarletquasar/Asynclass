@@ -38,8 +38,8 @@ class WeatherInfo : Async<WeatherInfo>
         {
             var fullWeatherData = await _someWeatherProvider.GetFullData();
             
-            Temperature = fullWeatherData.temperature;
-            WindSpeed = fullWeatherData.windSpeed;
+            instance = fullWeatherData.temperature;
+            instance = fullWeatherData.windSpeed;
         });
         
         Catch(errors => 
