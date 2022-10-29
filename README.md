@@ -19,6 +19,7 @@ Console.WriteLine($"The current wind speed is {currentWeather.WindSpeed}");
 
 ```cs
 using Asynclass;
+using System;
 
 class WeatherInfo : Async<WeatherInfo> 
 {
