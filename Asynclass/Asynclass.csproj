@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/victoriaquasar/Asynclass</RepositoryUrl>
+    <Description>Easy async-driven C# constructors</Description>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
