@@ -10,7 +10,7 @@ namespace Asynclass
         private bool _throwOnError = false;
         private uint _retryTimes = 1;
 
-        public void Config(Action<Options> optionsExpression)
+        protected void Config(Action<Options> optionsExpression)
         {
             if (!_initialized)
             {
@@ -26,7 +26,7 @@ namespace Asynclass
             throw new InvalidOperationException("Can't set a configuration in a initialized async class");
         }
 
-        public void Init(Func<TBase, Task> initializer)
+        protected void Init(Func<TBase, Task> initializer)
         {
             if(!_initialized)
             {
@@ -39,7 +39,7 @@ namespace Asynclass
             throw new InvalidOperationException("The class has already been initialized");
         }
 
-        public void Catch(Action<List<Exception>> catcher)
+        protected void Catch(Action<List<Exception>> catcher)
         {
             if(_initialized)
             {
