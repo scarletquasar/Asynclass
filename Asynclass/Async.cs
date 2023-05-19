@@ -1,32 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
 
 namespace Asynclass
-{
+{ 
     public abstract class Async<TBase> where TBase : Async<TBase>
     {
-        private Func<TBase, Task> _initializer = async a => await Task.Delay(0);
-        private Action<List<Exception>> _catcher = async a => await Task.Delay(0);
+        private Func<Task> _initializer = async () => await Task.FromResult(0);
         private bool _initialized;
-        private bool _throwOnError = false;
-        private uint _retryTimes = 1;
 
-        protected void Config(Action<Options> optionsExpression)
-        {
-            if (!_initialized)
-            {
-                var defaultOptions = new Options();
-                optionsExpression(defaultOptions);
-
-                _retryTimes = defaultOptions.RetryTimes;
-                _throwOnError = defaultOptions.ThrowOnError;
-
-                return;
-            }
-
-            throw new InvalidOperationException("Can't set a configuration in a initialized async class");
-        }
-
-        protected void Init(Func<TBase, Task> initializer)
+        protected void Init(Func<Task> initializer)
         {
             if(!_initialized)
             {
@@ -39,63 +20,25 @@ namespace Asynclass
             throw new InvalidOperationException("The class has already been initialized");
         }
 
-        protected void Catch(Action<List<Exception>> catcher)
-        {
-            if(_initialized)
-            {
-                _catcher = catcher;
-
-                return;
-            }
-
-            throw new InvalidOperationException("Can't define a catcher in a non-initialized async class");
-        }
-
-        private async Task<TBase> Initialize(Func<TBase, Task> initializer)
+        private async Task<TBase> Initialize(Func<Task> initializer)
         {
             var baseInstance = (TBase)(object)this;
 
-            await Task.Run(() => initializer(baseInstance));
+            await Task.Run(() => initializer());
             return baseInstance;
         }
 
         public TaskAwaiter<TBase> GetAwaiter()
         {
-            TaskAwaiter<TBase>? awaiter = null;
-            List<Exception> exceptions = new();
-
-            while(awaiter is null && _retryTimes > 0)
-            {
-                try
-                {
-                    awaiter = Initialize(_initializer).GetAwaiter();
-                }
-                catch (Exception ex)
-                {
-                    exceptions.Add(ex);
-                }
-                finally
-                {
-                    _retryTimes--;
-                }
-            }
-            
             try
             {
-                if (awaiter is null)
-                    throw new ArgumentNullException();
+                TaskAwaiter<TBase>? awaiter = Initialize(_initializer).GetAwaiter();
+                return (TaskAwaiter<TBase>)awaiter!;
             }
             catch
             {
-                if(_throwOnError)
-                {
-                    throw new AggregateException(exceptions);
-                }
-
-                _catcher(exceptions);
+                throw;
             }
-
-            return (TaskAwaiter<TBase>)awaiter!;
         }
     }
 }

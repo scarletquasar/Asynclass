@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -8,31 +9,26 @@ namespace Asynclass.Tests
         [Fact]
         public async void AsyncClassShouldWorkProperly()
         {
-            var instance = await new MockedClass(10, 20);
-
-            Assert.Equal(10, instance.ValueA);
-            Assert.Equal(20, instance.ValueB);
+            var instance = await new UserLogin();
+            Assert.Equal("aaaaaaaaaaaaaaaaaaaaaaaaaaaa", instance.Token);
+            Assert.Equal(DateTime.MinValue, instance.LastLogin);
         }
     }
 
-    class MockedClass : Async<MockedClass>
+    class UserLogin : Async<UserLogin>
     {
-        public int ValueA { get; set; }
-        public int ValueB { get; set; }
+        public string? Token { get; set; }
+        public DateTime? LastLogin { get; set; }
 
-        public MockedClass(int valueA, int valueB)
+        public UserLogin()
         {
-            Config(options =>
-            {
-                options.ThrowOnError = true;
-                options.RetryTimes = 1;
-            });
 
-            Init(async instance =>
+            Init(async () =>
             {
-                await Task.Delay(100);
-                instance.ValueA = valueA;
-                instance.ValueB = valueB;
+                var token = await Task.FromResult("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+                Token = token;
+                LastLogin = DateTime.MinValue;
             });
         }
     }
