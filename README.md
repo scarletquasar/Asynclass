@@ -25,7 +25,7 @@ class WeatherInfo : Async<WeatherInfo>
     
     public WeatherInfo(DateTime dateTime) 
     {
-        Init(async instance => 
+        Init(async () => 
         {
             Temperature = fullWeatherData.temperature;
             WindSpeed = fullWeatherData.windSpeed;
