@@ -14,9 +14,6 @@ var currentWeather = await new WeatherInfo(DateTime.Now);
 Console.WriteLine($"The current temperature is {currentWeather.Temperature}"); 
 Console.WriteLine($"The current wind speed is {currentWeather.WindSpeed}"); 
 ```
-
-**Creating classes using the `Config-Init-Catch` pattern:**
-
 ```cs
 using Asynclass;
 using System;
@@ -28,24 +25,12 @@ class WeatherInfo : Async<WeatherInfo>
     
     public WeatherInfo(DateTime dateTime) 
     {
-        Config(options => 
-        {
-            options.ThrowOnError = false;
-            options.RetryTimes = 5;
-        });
-
         Init(async instance => 
         {
             var fullWeatherData = await _someWeatherProvider.GetFullData(dateTime);
             
             instance.Temperature = fullWeatherData.temperature;
             instance.WindSpeed = fullWeatherData.windSpeed;
-        });
-        
-        Catch(errors => 
-        {
-            errros.ForEach(e => Console.WriteLine(e.Message));
-            Environment.Exit(0);
         });
     }
 }
