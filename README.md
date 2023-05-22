@@ -27,8 +27,8 @@ class WeatherInfo : Async<WeatherInfo>
     {
         Init(async () => 
         {
-            Temperature = fullWeatherData.temperature;
-            WindSpeed = fullWeatherData.windSpeed;
+            Temperature = await _externalService.GetTemperature();
+            WindSpeed = await _externalService.GetWindSpeed();
         });
     }
 }
