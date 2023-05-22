@@ -27,10 +27,8 @@ class WeatherInfo : Async<WeatherInfo>
     {
         Init(async instance => 
         {
-            var fullWeatherData = await _someWeatherProvider.GetFullData(dateTime);
-            
-            instance.Temperature = fullWeatherData.temperature;
-            instance.WindSpeed = fullWeatherData.windSpeed;
+            Temperature = fullWeatherData.temperature;
+            WindSpeed = fullWeatherData.windSpeed;
         });
     }
 }
